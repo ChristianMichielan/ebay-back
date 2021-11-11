@@ -10,22 +10,19 @@ module.exports.connecter = (req, res, next) => {
 
     models.utilisateur.findOne({
         where: {
-            pseudo: pseudo,
-            motDePasse: motDePasse
+            pseudoU: pseudo,
+            motDePasseU: motDePasse
         }
     }).then(utilisateur => {
-        console.log(utilisateur)
+        console.log(utilisateur);
         return res.status(201).json({
-            utilisateur: {
-                idUtilisateur: utilisateur.idUtilisateur,
-                pseudo: utilisateur.pseudo
-            }
-
+            idU: utilisateur.idU,
+            pseudoU: utilisateur.pseudoU
         });
     }).catch(error => {
-        console.log(error)
+        console.log(error);
         return res.status(401).json(
             { message: "Erreur d'authentification" }
         )
     })
-}
+};
