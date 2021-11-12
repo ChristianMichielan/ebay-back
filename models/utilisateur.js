@@ -30,7 +30,7 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true
     },
     photoU: {
-      type: DataTypes.BLOB,
+      type: DataTypes.STRING(255),
       allowNull: true
     },
     geolocalisationLatU: {

@@ -9,13 +9,13 @@ module.exports.creerUnCompte = (req, res, next) => {
     let motDePasse = req.body.motDePasseU;
     let nom = req.body.nomU;
     let prenom = req.body.prenomU;
-    let email = req.body.emailU;
+    let email = req.body.mailU;
     let geolocLat = req.body.geolocalisationLatU;
     let geolocLong = req.body.geolocalisationLongU;
     let adresse = req.body.adresseU;
 
     models.utilisateur.create({ pseudoU: pseudo, motDePasseU: motDePasse, nomU: nom, prenomU: prenom,
-    emailU: email, geolocalisationLatU: geolocLat, geolocalisationLongU: geolocLong, adresseU: adresse}).then(
+    mailU: email, geolocalisationLatU: geolocLat, geolocalisationLongU: geolocLong, adresseU: adresse}).then(
         utilisateur => {
             console.log(utilisateur);
             return res.status(201).json({
@@ -29,3 +29,18 @@ module.exports.creerUnCompte = (req, res, next) => {
         })
     });
 };
+
+
+module.exports.mettreAJourPhoto = (fileUrl, req, res) => {
+
+    pIdUtilisateur = req.params.idUtilisateur;
+    sqlUpdateUtilisateur = "UPDATE utilisateur SET photoU = :photoU WHERE idU = :idU";
+
+    sequelize.query(sqlUpdateUtilisateur, {
+        replacements: { photoU: fileUrl, idU: pIdUtilisateur },
+        type: QueryTypes.UPDATE
+    }).then(() => {
+        return res.status(201).json({
+            message: "Enregistrement effectué"
+        });
+})};
