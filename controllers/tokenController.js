@@ -5,8 +5,8 @@ var initModels = require('../models/init-models');
 var models = initModels(sequelize);
 
 module.exports.connecter = (req, res, next) => {
-    let pseudo = req.body.pseudo;
-    let motDePasse = req.body.motDePasse;
+    let pseudo = req.body.pseudoU;
+    let motDePasse = req.body.motDePasseU;
 
     models.utilisateur.findOne({
         where: {
