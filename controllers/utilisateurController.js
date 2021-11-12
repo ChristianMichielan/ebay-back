@@ -12,9 +12,10 @@ module.exports.creerUnCompte = (req, res, next) => {
     let email = req.body.emailU;
     let geolocLat = req.body.geolocalisationLatU;
     let geolocLong = req.body.geolocalisationLongU;
+    let adresse = req.body.adresseU;
 
     models.utilisateur.create({ pseudoU: pseudo, motDePasseU: motDePasse, nomU: nom, prenomU: prenom,
-    emailU: email, geolocalisationLatU: geolocLat, geolocalisationLongU: geolocLong}).then(
+    emailU: email, geolocalisationLatU: geolocLat, geolocalisationLongU: geolocLong, adresseU: adresse}).then(
         utilisateur => {
             console.log(utilisateur);
             return res.status(201).json({
