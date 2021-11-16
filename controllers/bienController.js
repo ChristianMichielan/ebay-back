@@ -35,3 +35,30 @@ async function transformPhotoBase64(bienRes, res) {
         }
     )
 }
+
+/**
+ * Retourne pour UN utilisateur les biens qu'il a vendu (qui sont donc à livrer), non vendus et livrés à l'acheteur
+ * @param req
+ * @param res
+ * @param next
+ */
+module.exports.getBiensVendus = (req, res, next) => {
+    pIdUtilisateur = parseInt(req.params.idUtilisateur);
+    var sqlQuery = "SELECT B.idB, B.nomB, B.descriptionB, B.photoB, B.etatB, E1.prix FROM Bien B, Encherir E1 WHERE B.UTILISATEURidU = :idUtilisateur AND B.etatB IN ('vendu', 'livre') AND E1.BIENidB = (SELECT E2.BIENidB FROM Encherir E2 WHERE E2.BIENidB = B.idB) UNION SELECT B2.idB, B2.nomB, B2.descriptionB, B2.photoB, B2.etatB, B2.prixPlancherB FROM Bien B2 WHERE B2.UTILISATEURidU = :idUtilisateur AND B2.etatB = 'non_vendu'";
+
+    sequelize.query(sqlQuery, {
+        replacements: { idUtilisateur: pIdUtilisateur },
+        type: QueryTypes.SELECT
+    }).then(bienRes => {
+        res.status(200).json(
+            {
+                biens : bienRes
+            }
+        )
+    }).catch(error => {
+        console.log(error);
+        res.status(500).json({
+            message: error
+        });
+    });
+}

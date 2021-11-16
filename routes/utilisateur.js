@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var utilisateurController = require('../controllers/utilisateurController');
+var bienController = require('../controllers/bienController');
 var multer  = require('multer');
 
 router.get('/', function(req, res, next) {
@@ -26,4 +27,15 @@ var upload = multer({ storage: storage });
 router.post('/:idUtilisateur/photo', upload.single('avatar'), (req, res) => {
   utilisateurController.mettreAJourPhoto(req.file.path, req, res);
 });
+
+
+
+/**
+ * Retourne les biens vendus (qui sont à livrer), non vendus et livrés à l'acheteur
+ */
+router.get('/:idUtilisateur/bien', function (req, res, next) {
+  bienController.getBiensVendus(req, res, next);
+})
+
+
 module.exports = router;
