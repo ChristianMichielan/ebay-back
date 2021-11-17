@@ -38,6 +38,7 @@ async function transformPhotoBase64(bienRes, res) {
 
 /**
  * Retourne pour UN utilisateur les biens qu'il a vendu (qui sont donc à livrer), non vendus et livrés à l'acheteur
+ * url : http://localhost:3000/utilisateur/:idUtilisateur/bien
  * @param req
  * @param res
  * @param next
