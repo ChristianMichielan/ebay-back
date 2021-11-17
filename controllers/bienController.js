@@ -35,3 +35,37 @@ async function transformPhotoBase64(bienRes, res) {
         }
     )
 }
+
+module.exports.creerUnBien = (req, res, next) => {
+    let nom = req.body.nomB;
+    let description = req.body.descriptionB;
+    let prixPlancher = req.body.prixPlancherB;
+    let etat = 'en_cours';
+    let idUtilisateur = req.params.idUtilisateur;
+    models.bien.create({ nomB: nom, descriptionB: description, prixPlancherB: prixPlancher, dateCreationB: sequelize.fn('NOW'),
+        etatB: etat, UTILISATEURidU: idUtilisateur}).then(
+        bien => {
+            return res.status(201).json({
+                bien: bien
+            });
+        }
+    ).catch(error => {
+        res.status(400).json({
+            message: error
+        })
+    });
+};
+
+module.exports.mettreAJourPhotoBien = (fileUrl, req, res) => {
+
+    pIdBien = req.params.idBien;
+    sqlUpdateUtilisateur = "UPDATE bien SET photoB = :photoB WHERE idB = :idB";
+
+    sequelize.query(sqlUpdateUtilisateur, {
+        replacements: { photoB: fileUrl, idB: pIdBien },
+        type: QueryTypes.UPDATE
+    }).then(() => {
+        return res.status(201).json({
+            message: "Enregistrement effectué"
+        });
+    })};
