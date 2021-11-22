@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var utilisateurController = require('../controllers/utilisateurController');
 var bienController = require('../controllers/bienController');
+var enchereController = require('../controllers/enchereController');
 var multer  = require('multer');
 
 /***********  Helper Stockage IMAGE ***********/
@@ -36,7 +37,7 @@ router.post('/', function(req, res, next) {
 });
 
 /**
- * api/v1/{idUtilisateur}/photo
+ * api/v1/utilisateur/{idUtilisateur}/photo
  * Permet d'ajouter une photo à l'utilisateur
  */
 router.post('/:idUtilisateur/photo', upload.single('avatar'), (req, res) => {
@@ -44,11 +45,19 @@ router.post('/:idUtilisateur/photo', upload.single('avatar'), (req, res) => {
 });
 
 /**
- * api/v1/{idUtilisateur}/bien
+ * api/v1/utilisateur/{idUtilisateur}/bien
  * Creer une annonce de bien aux enchères pour un utilisateur
  * */
 router.post('/:idUtilisateur/bien', function(req, res, next) {
   bienController.creerUnBien(req, res, next);
+});
+
+/**
+ * api/v1/utilisateur/{idUtilisateur}/enchere
+ * Permet d'encherir sur un bien
+ * */
+router.post('/:idUtilisateur/enchere', function(req, res, next) {
+  enchereController.encherir(req, res, next);
 });
 
 module.exports = router;
