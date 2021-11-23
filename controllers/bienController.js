@@ -5,10 +5,35 @@ var initModels = require('../models/init-models');
 var models = initModels(sequelize);
 
 module.exports.getBiens = (req, res, next) => {
-    // A mettre à jour avec la photo dès que possible
-    // Récupérer url de la photo, la chercher dans le dossier upload, la convertir en blob b64 et l'envoyer avec le retour API
-    sequelize.query('SELECT * FROM bien', {
+    sequelize.query('SELECT bien.*, MAX(prix) as prixEnchereCourante' +
+        ' FROM bien' +
+        ' LEFT JOIN encherir ON bien.idB = encherir.BIENidB \n' +
+        " WHERE etatB = 'en_cours'" +
+        " GROUP BY bien.idB", {
         type: QueryTypes.SELECT
+    }).then(bienRes => {
+        transformPhotoBase64(bienRes, res)
+            .then(r => console.log('envoi réussi'))
+            .catch(error => {
+                res.status(500).json({
+                    message: error
+                });
+            });
+    }).catch(error => {
+        res.status(500).json({
+            message: error
+        });
+    });
+};
+
+module.exports.getUnBien = (req, res, next) => {
+    pIdBien = req.params.idBien;
+    sequelize.query('SELECT B.idB, B.nomB, B.descriptionB, B.photoB, B.etatB, B.prixPlancherB, MAX(E1.prix) as prixEnchereCourante\n' +
+        'FROM Bien B\n' +
+        'LEFT JOIN encherir E1 ON B.idB = E1.BIENidB \n' +
+        'WHERE B.idB = :idB\n' , {
+        type: QueryTypes.SELECT,
+        replacements: { idB: pIdBien },
     }).then(bienRes => {
         transformPhotoBase64(bienRes, res)
             .then(r => console.log('envoi réussi'))
