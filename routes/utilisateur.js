@@ -23,8 +23,9 @@ var upload = multer({ storage: storage });
  * /api/v1/utilisateur
  * Permet d'obtenir un utilisateur
  */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
+router.get('/:idU', function(req, res, next) {
+  utilisateurController.getInfoUser(req,res)
+  
 });
 
 /**
