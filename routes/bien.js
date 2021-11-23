@@ -25,6 +25,14 @@ router.get('/', function(req, res, next) {
 });
 
 /**
+ * api/v1/bien/{idBien}
+ * Permet d'obtenir les infos d'un bien en particulier
+ * */
+router.get('/:idBien', function(req, res, next) {
+    bienController.getUnBien(req, res, next);
+});
+
+/**
  * api/v1/bien{idBien}/photo
  * Ajoute une photo pour un bien aux enchères
  * */

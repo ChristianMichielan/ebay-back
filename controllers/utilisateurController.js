@@ -16,6 +16,12 @@ module.exports.creerUnCompte = (req, res, next) => {
     let geolocLong = req.body.geolocalisationLongU;
     let adresse = req.body.adresseU;
 
+    if (pseudo === undefined || motDePasse === undefined || nom === undefined || prenom === undefined ||
+    email === undefined || adresse === undefined) {
+        return res.status(401).json({
+            message: 'Données manquantes'
+        });
+    }
     models.utilisateur.create({ pseudoU: pseudo, motDePasseU: motDePasse, nomU: nom, prenomU: prenom,
     mailU: email, geolocalisationLatU: geolocLat, geolocalisationLongU: geolocLong, adresseU: adresse}).then(
         utilisateur => {
