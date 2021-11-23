@@ -109,7 +109,7 @@ module.exports.mettreAJourPhotoBien = (fileUrl, req, res) => {
  */
 module.exports.getEncheresEnCours = (req, res, next) => {
     pIdUtilisateur = parseInt(req.params.idUtilisateur);
-    var sqlQuery = "SELECT B.idB, B.nomB, B.descriptionB, B.photoB, B.etatB, E1.prix FROM Encherir E1, Bien B WHERE E1.BIENidB = B.idB AND E1.UTILISATEURidU = :idUtilisateur AND B.etatB = 'en_cours' AND E1.prix = (SELECT MAX(E2.prix) FROM Encherir E2 WHERE E2.BIENidB = E1.BIENidB AND E2.UTILISATEURidU = E1.UTILISATEURidU)";
+    var sqlQuery = "SELECT B.idB, B.nomB, B.descriptionB, B.photoB, B.etatB, E1.prix, B.dateCreationB FROM Encherir E1, Bien B WHERE E1.BIENidB = B.idB AND E1.UTILISATEURidU = :idUtilisateur AND B.etatB = 'en_cours' AND E1.prix = (SELECT MAX(E2.prix) FROM Encherir E2 WHERE E2.BIENidB = E1.BIENidB AND E2.UTILISATEURidU = E1.UTILISATEURidU)";
     sequelize.query(sqlQuery, {
         replacements: { idUtilisateur: pIdUtilisateur },
         type: QueryTypes.SELECT
