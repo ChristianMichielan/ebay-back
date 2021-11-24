@@ -91,6 +91,12 @@ module.exports.getBiensVendus = (req, res, next) => {
     });
 }
 
+/**
+ * Créer un bien dans le système et défini sa durée de disponibilité pour les enchères (5 min).
+ * @param req
+ * @param res
+ * @param next
+ */
 module.exports.creerUnBien = (req, res, next) => {
     let nom = req.body.nomB;
     let description = req.body.descriptionB;
@@ -113,8 +119,7 @@ module.exports.creerUnBien = (req, res, next) => {
     });
 
     // Le bien n'est plus disponible à la vente (enchère cloturé) -> durée de publication = 5min
-    //let dureePublicationBien = 300000;
-    let dureePublicationBien = 30000;
+    let dureePublicationBien = 300000;
     setTimeout(function(){
         // Vérifier si le bien à au mois une enchère (sélectionné la plus haute)
         var sqlQueryCheckEnchereBien =
@@ -206,7 +211,23 @@ module.exports.getEncheresEnCours = (req, res, next) => {
  */
 module.exports.getLivraisons = (req, res, next) => {
     pIdUtilisateur = parseInt(req.params.idUtilisateur);
-    var sqlQuery = "SELECT B.idB, B.nomB, B.descriptionB, B.photoB, B.etatB, L.dateL FROM Livraison L, Bien B WHERE B.idB = L.BIENidB AND B.etatB = 'livre' AND L.UTILISATEURidU = :idUtilisateur";
+    var sqlQuery =
+        "SELECT B1.idB, B1.nomB, B1.descriptionB, B1.photoB, B1.etatB " +
+        "FROM Livraison L, Bien B1 " +
+        "WHERE B1.idB = L.BIENidB " +
+        "AND B1.etatB = 'livre' " +
+        "AND L.UTILISATEURidU = :idUtilisateur " +
+        "UNION " +
+        "SELECT B.idB, B.nomB, B.descriptionB, B.photoB, B.etatB " +
+        "FROM Encherir E1, Bien B " +
+        "WHERE E1.BIENidB = B.idB " +
+        "AND E1.UTILISATEURidU = :idUtilisateur " +
+        "AND B.etatB = 'vendu' " +
+        "AND E1.prix = (SELECT MAX(E2.prix)  " +
+                        "FROM Encherir E2 " +
+                        "WHERE E2.BIENidB = E1.BIENidB  " +
+                        "AND E2.UTILISATEURidU = E1.UTILISATEURidU) ";
+
     sequelize.query(sqlQuery, {
         replacements: { idUtilisateur: pIdUtilisateur },
         type: QueryTypes.SELECT
