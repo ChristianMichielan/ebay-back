@@ -70,7 +70,7 @@ async function transformPhotoBase64(bienRes, res) {
  */
 module.exports.getBiensVendus = (req, res, next) => {
     pIdUtilisateur = parseInt(req.params.idUtilisateur);
-    var sqlQuery = "SELECT B.idB, B.nomB, B.descriptionB, B.photoB, B.etatB, E1.prix FROM Bien B, Encherir E1 WHERE B.UTILISATEURidU = :idUtilisateur AND B.etatB IN ('vendu', 'livre') AND E1.BIENidB = (SELECT E2.BIENidB FROM Encherir E2 WHERE E2.BIENidB = B.idB) UNION SELECT B2.idB, B2.nomB, B2.descriptionB, B2.photoB, B2.etatB, B2.prixPlancherB FROM Bien B2 WHERE B2.UTILISATEURidU = :idUtilisateur AND B2.etatB = 'non_vendu'";
+    var sqlQuery = "SELECT B.idB, B.nomB, B.descriptionB, B.photoB, B.etatB, E1.prix FROM Bien B, Encherir E1 WHERE B.UTILISATEURidU = :idUtilisateur AND B.etatB IN ('vendu', 'livre', 'non_vendu') AND E1.BIENidB = (SELECT E2.BIENidB FROM Encherir E2 WHERE E2.BIENidB = B.idB) UNION SELECT B2.idB, B2.nomB, B2.descriptionB, B2.photoB, B2.etatB, B2.prixPlancherB FROM Bien B2 WHERE B2.UTILISATEURidU = :idUtilisateur AND B2.etatB = 'non_vendu'";
 
     sequelize.query(sqlQuery, {
         replacements: { idUtilisateur: pIdUtilisateur },
@@ -97,9 +97,11 @@ module.exports.creerUnBien = (req, res, next) => {
     let prixPlancher = req.body.prixPlancherB;
     let etat = 'en_cours';
     let idUtilisateur = req.params.idUtilisateur;
+    let idBienInserted = 0;
     models.bien.create({ nomB: nom, descriptionB: description, prixPlancherB: prixPlancher, dateCreationB: sequelize.fn('NOW'),
         etatB: etat, UTILISATEURidU: idUtilisateur}).then(
         bien => {
+            idBienInserted = bien.dataValues.idB;
             return res.status(201).json({
                 bien: bien
             });
@@ -109,6 +111,48 @@ module.exports.creerUnBien = (req, res, next) => {
             message: error
         })
     });
+
+    // Le bien n'est plus disponible à la vente (enchère cloturé) -> durée de publication = 5min
+    //let dureePublicationBien = 300000;
+    let dureePublicationBien = 30000;
+    setTimeout(function(){
+        // Vérifier si le bien à au mois une enchère (sélectionné la plus haute)
+        var sqlQueryCheckEnchereBien =
+            "SELECT DISTINCT B.idB, B.nomB, B.etatB " +
+            "FROM Encherir E1, Bien B " +
+            "WHERE E1.BIENidB = B.idB " +
+            "AND B.idB = :idBien " +
+            "AND B.etatB = 'en_cours'";
+
+        sequelize.query(sqlQueryCheckEnchereBien, {
+            replacements: { idBien: idBienInserted},
+            type: QueryTypes.SELECT
+        }).then(bienRes => {
+            if(bienRes.length) {
+                // Si le bien a une enchère -> etat = vendu
+                var sqlQueryBienVendu = "UPDATE Bien SET etatB = 'vendu' WHERE idB = :idBien";
+                sequelize.query(sqlQueryBienVendu, {
+                    replacements: { idBien: idBienInserted},
+                    type: QueryTypes.UPDATE
+                });
+                console.log('Statut du bien n° ' + idBienInserted + ' mis à jour : vendu');
+            } else {
+                // Sinon le bien n'a pas d'enchère -> etat = non_vendu
+                var sqlQueryBienNonVendu = "UPDATE Bien SET etatB = 'non_vendu' WHERE idB = :idBien";
+                sequelize.query(sqlQueryBienNonVendu, {
+                    replacements: { idBien: idBienInserted},
+                    type: QueryTypes.UPDATE
+                });
+                console.log('Statut du bien n° ' + idBienInserted + ' mis à jour : non_vendu');
+            }
+        }).catch(error => {
+            res.status(500).json({
+                message: error
+            });
+        });
+
+        console.log("Bien n°" + idBienInserted + " n'est plus disponible à la vente");
+    }, dureePublicationBien);
 };
 
 module.exports.mettreAJourPhotoBien = (fileUrl, req, res) => {
