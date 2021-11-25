@@ -28,7 +28,7 @@ module.exports.getBiens = (req, res, next) => {
 
 module.exports.getUnBien = (req, res, next) => {
     pIdBien = req.params.idBien;
-    sequelize.query('SELECT B.idB, B.nomB, B.descriptionB, B.photoB, B.etatB, B.prixPlancherB, MAX(E1.prix) as prixEnchereCourante\n' +
+    sequelize.query('SELECT B.idB, B.nomB, B.descriptionB, B.photoB, B.etatB, B.prixPlancherB, MAX(E1.prix) as prixEnchereCourante, E1.UTILISATEURidU as idDernierEncherisseur\n' +
         'FROM Bien B\n' +
         'LEFT JOIN encherir E1 ON B.idB = E1.BIENidB \n' +
         'WHERE B.idB = :idB\n' , {

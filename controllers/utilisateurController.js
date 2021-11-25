@@ -6,6 +6,14 @@ var initModels = require('../models/init-models');
 const utilisateur = require('../models/utilisateur');
 var models = initModels(sequelize);
 
+/**
+ * Permet de créer un compte
+ *
+ * @param req
+ * @param res
+ * @param next
+ * @returns {Json | Promise<any> | any}
+ */
 module.exports.creerUnCompte = (req, res, next) => {
     let pseudo = req.body.pseudoU;
     let motDePasse = req.body.motDePasseU;
@@ -31,7 +39,7 @@ module.exports.creerUnCompte = (req, res, next) => {
                 pseudoU: utilisateur.pseudoU
             });
         }
-    ).catch(error => {  
+    ).catch(error => {
         res.status(400).json({
             message: error
         })
@@ -57,8 +65,8 @@ module.exports.mettreAJourPhoto = (fileUrl, req, res) => {
 module.exports.getInfoUser = (('/:idU'), async (req, res) => {
     pIdUtilisateur = req.params.idU;
     qr = "select * from utilisateur where idU = :idU";
-    console.log('get users by id')
-    
+    console.log('get users by id');
+
     sequelize.query(qr,{
         replacements: {idU : pIdUtilisateur},
         type:QueryTypes.SELECT
@@ -75,27 +83,9 @@ module.exports.getInfoUser = (('/:idU'), async (req, res) => {
             message: error
         });
 
-        
+
     })
-})
-
-
-// module.exports.getInfoUser = (('/:idU'), async (req, res) => {
-//     pIdUtilisateur = req.params.idU;
-//     qr = "select * from utilisateur where idU = :idU";
-//     console.log('get users by id')
-    
-//     sequelize.query(qr,{
-//         replacements: {idU : pIdUtilisateur},
-//         type:QueryTypes.SELECT
-//     }).then((utilisateur) => {
-//         console.log(utilisateur)
-//         return res.status(201).json({
-//             //message: "get info utilisateur"
-//             utilisateur: utilisateur
-//         });
-//     })
-// })
+});
 
 //Recuperer les infor des tous les utilisateur, ca serve pas pour la partie front
 module.exports.getUser = (req, res, next) => {
@@ -108,7 +98,7 @@ module.exports.getUser = (req, res, next) => {
             message: error
         });
     })
-)}
+)};
 
 // convertir le format de photo en base64 => l'afficher sur la partie front
 async function transformPhotoBase64(userRes, res) {
@@ -118,7 +108,7 @@ async function transformPhotoBase64(userRes, res) {
     res.status(200).json(
         {
             utilisateur : userRes
-    
+
         }
     )
 }}
