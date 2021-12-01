@@ -89,7 +89,7 @@ module.exports.getBiensVendus = (req, res, next) => {
             message: error
         });
     });
-}
+};
 
 /**
  * Créer un bien dans le système et défini sa durée de disponibilité pour les enchères (5 min).
@@ -201,7 +201,7 @@ module.exports.getEncheresEnCours = (req, res, next) => {
             message: error
         });
     });
-}
+};
 
 /**
  * Retourne les biens achetés par l'utilisateur et qui sont livrés ou en attente de livraison
@@ -245,6 +245,6 @@ module.exports.getLivraisons = (req, res, next) => {
             message: error
         });
     });
-}
+};
 
 
