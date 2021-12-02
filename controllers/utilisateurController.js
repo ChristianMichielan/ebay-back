@@ -46,7 +46,12 @@ module.exports.creerUnCompte = (req, res, next) => {
     });
 };
 
-
+/**
+ * Met à jour un utilisateur en lui ajoutant sa photo
+ * @param fileUrl
+ * @param req
+ * @param res
+ */
 module.exports.mettreAJourPhoto = (fileUrl, req, res) => {
 
     pIdUtilisateur = req.params.idUtilisateur;
@@ -61,7 +66,9 @@ module.exports.mettreAJourPhoto = (fileUrl, req, res) => {
         });
 })};
 
-//Recuperer les infor de l'user par son id
+/**
+ * Permet d'obtenir un utilisateur
+ */
 module.exports.getInfoUser = (('/:idU'), async (req, res) => {
     pIdUtilisateur = req.params.idU;
     qr = "select * from utilisateur where idU = :idU";
@@ -87,7 +94,12 @@ module.exports.getInfoUser = (('/:idU'), async (req, res) => {
     })
 });
 
-//Recuperer les infor des tous les utilisateur, ca serve pas pour la partie front
+/**
+ * Récupérer les informations de tous les utilisateurs
+ * @param req
+ * @param res
+ * @param next
+ */
 module.exports.getUser = (req, res, next) => {
     sequelize.query('SELECT * FROM utilisateur ', {
         type: QueryTypes.SELECT
@@ -100,7 +112,12 @@ module.exports.getUser = (req, res, next) => {
     })
 )};
 
-// convertir le format de photo en base64 => l'afficher sur la partie front
+/**
+ * Permet de transformer une photo en base64
+ * @param userRes
+ * @param res
+ * @returns {Promise<void>}
+ */
 async function transformPhotoBase64(userRes, res) {
     const fs = require('fs').promises;
     for (const element of userRes) {

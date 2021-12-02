@@ -4,6 +4,12 @@ var sequelize = require('../bdd/connect');
 var initModels = require('../models/init-models');
 var models = initModels(sequelize);
 
+/**
+ * Permet d'obtenir tous les biens
+ * @param req
+ * @param res
+ * @param next
+ */
 module.exports.getBiens = (req, res, next) => {
     sequelize.query('SELECT bien.*, MAX(prix) as prixEnchereCourante' +
         ' FROM bien' +
@@ -26,9 +32,15 @@ module.exports.getBiens = (req, res, next) => {
     });
 };
 
+/**
+ * Permet d'obtenir un bien en particulier
+ * @param req
+ * @param res
+ * @param next
+ */
 module.exports.getUnBien = (req, res, next) => {
     pIdBien = req.params.idBien;
-    sequelize.query('SELECT B.idB, B.nomB, B.descriptionB, B.photoB, B.etatB, B.prixPlancherB, MAX(E1.prix) as prixEnchereCourante, E1.UTILISATEURidU as idDernierEncherisseur\n' +
+    sequelize.query('SELECT B.idB, B.nomB, B.descriptionB, B.photoB, B.etatB, B.prixPlancherB, B.UTILISATEURidU, MAX(E1.prix) as prixEnchereCourante, E1.UTILISATEURidU as idDernierEncherisseur\n' +
         'FROM Bien B\n' +
         'LEFT JOIN encherir E1 ON B.idB = E1.BIENidB \n' +
         'WHERE B.idB = :idB\n' , {
@@ -49,6 +61,12 @@ module.exports.getUnBien = (req, res, next) => {
     });
 };
 
+/**
+ * Transforme une image en Base64
+ * @param bienRes
+ * @param res
+ * @returns {Promise<void>}
+ */
 async function transformPhotoBase64(bienRes, res) {
     const fs = require('fs').promises;
     for (const element of bienRes) {
