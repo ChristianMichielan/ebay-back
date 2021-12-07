@@ -3,6 +3,7 @@ var router = express.Router();
 var utilisateurController = require('../controllers/utilisateurController');
 var bienController = require('../controllers/bienController');
 var enchereController = require('../controllers/enchereController');
+var livraisonController = require('../controllers/livraisonController');
 var multer  = require('multer');
 
 /***********  Helper Stockage IMAGE ***********/
@@ -24,8 +25,9 @@ var upload = multer({ storage: storage });
  * /api/v1/utilisateur
  * Permet d'obtenir un utilisateur
  */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
+router.get('/:idU', function(req, res, next) {
+  utilisateurController.getInfoUser(req,res)
+
 });
 
 /**
@@ -82,6 +84,14 @@ router.post('/:idUtilisateur/bien', function(req, res, next) {
  * */
 router.post('/:idUtilisateur/enchere', function(req, res, next) {
   enchereController.encherir(req, res, next);
+});
+
+/**
+ * api/v1/utilisateur/{idUtilisateur}/livraison
+ * Permet de créer une livraison d'un bien pour un utilisateur
+ * */
+router.post('/:idUtilisateur/livraison', function(req, res, next) {
+  livraisonController.creerUneLivraison(req, res, next);
 });
 
 module.exports = router;
