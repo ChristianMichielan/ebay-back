@@ -86,13 +86,13 @@ SELECT * FROM Bien;
 
 -- Enchere 
 -- Toto a acheté l'iphone d'Alain
-INSERT INTO Encherir VALUES (1,2,710);
+INSERT INTO Encherir VALUES (1,1,710);
 -- Toto a acheté la table d'Alain
-INSERT INTO Encherir VALUES (1,3,512.14);
+INSERT INTO Encherir VALUES (1,2,512.14);
 SELECT * FROM Encherir;
 
 
 -- Livraison
 -- Toto a recu la table d'Alain
-INSERT INTO Livraison VALUES (3,1,NOW());
+INSERT INTO Livraison VALUES (2,1,NOW());
 SELECT * FROM Livraison; 
