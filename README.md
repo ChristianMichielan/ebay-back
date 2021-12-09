@@ -26,6 +26,6 @@ npm install
 npm start 
 
 
-## Lancer le projet 
+## Documentation API 
 
 Swagger disponible à l'URL suivante : https://app.swaggerhub.com/apis/christian.michielan/Ebay/1.0.0#/
