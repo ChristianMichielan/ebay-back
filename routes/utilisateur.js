@@ -52,7 +52,7 @@ router.post('/:idUtilisateur/photo', upload.single('avatar'), (req, res) => {
  */
 router.get('/:idUtilisateur/bien/avendre', function (req, res, next) {
   bienController.getBiensVendus(req, res, next);
-})
+});
 
 /**
  * api/v1/utilisateur/{idUtilisateur}/bien/encours
@@ -60,7 +60,7 @@ router.get('/:idUtilisateur/bien/avendre', function (req, res, next) {
  */
 router.get('/:idUtilisateur/bien/encours', function (req, res, next) {
   bienController.getEncheresEnCours(req, res, next);
-})
+});
 
 /**
  * api/v1/utilisateur/{idUtilisateur}/bien/livraisons
@@ -68,7 +68,7 @@ router.get('/:idUtilisateur/bien/encours', function (req, res, next) {
  */
 router.get('/:idUtilisateur/bien/livraisons', function (req, res, next) {
   bienController.getLivraisons(req, res, next);
-})
+});
 
 /**
  * api/v1/utilisateur/{idUtilisateur}/bien
