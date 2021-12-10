@@ -4,7 +4,12 @@ var sequelize = require('../bdd/connect');
 var initModels = require('../models/init-models');
 var models = initModels(sequelize);
 
-/* Permet d'enchérir sur un bien (proposer un prix sur une enchère) */
+/**
+ * Permet d'enchérir sur un bien (proposer un prix sur une enchère)
+ * @param req
+ * @param res
+ * @param next
+ */
 module.exports.encherir = (req, res, next) => {
     let prix = req.body.prix;
     let idB = req.body.idB;
