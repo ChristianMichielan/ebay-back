@@ -78,25 +78,6 @@ module.exports.getInfoUser = (('/:idU'), async (req, res) => {
         
     })
 })
-
-
-// module.exports.getInfoUser = (('/:idU'), async (req, res) => {
-//     pIdUtilisateur = req.params.idU;
-//     qr = "select * from utilisateur where idU = :idU";
-//     console.log('get users by id')
-    
-//     sequelize.query(qr,{
-//         replacements: {idU : pIdUtilisateur},
-//         type:QueryTypes.SELECT
-//     }).then((utilisateur) => {
-//         console.log(utilisateur)
-//         return res.status(201).json({
-//             //message: "get info utilisateur"
-//             utilisateur: utilisateur
-//         });
-//     })
-// })
-
 //Recuperer les infor des tous les utilisateur, ca serve pas pour la partie front
 module.exports.getUser = (req, res, next) => {
     sequelize.query('SELECT * FROM utilisateur ', {
