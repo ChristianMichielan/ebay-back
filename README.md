@@ -1,6 +1,6 @@
 # Projet M2 MIAGE - Ebay Back
 
-Ce projet a pour objectif de mettre en pratique la création d’une application mobile multi-plateforme. Ebay est une PWA qui s’inspire du site web éponyme. 
+Ce projet a pour objectif de mettre en pratique la création d’une application mobile multi-plateforme. Ebay est une application hybride qui s’inspire du site web éponyme. 
 La partie Back-end de Ebay propose les différentes ressources nécessaires à l’application au travers d’une interface REST.
 Le projet est réalisé avec Express.js et l'ORM Sequelize.
 
