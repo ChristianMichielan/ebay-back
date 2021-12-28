@@ -4,6 +4,10 @@ Ce projet a pour objectif de mettre en pratique la création d’une application
 La partie Back-end de Ebay propose les différentes ressources nécessaires à l’application au travers d’une interface REST.
 Le projet est réalisé avec Express.js et l'ORM Sequelize.
 
+## Vidéo de présentation
+
+Une présentation du projet est disponible à l'url suivante : https://youtu.be/jfWc4CEPflM
+
 ## Installer la base de données
 
 Installer une base de données MySQL.
