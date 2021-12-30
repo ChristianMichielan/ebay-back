@@ -18,7 +18,7 @@ User bdd : root
 
 Mdp bdd : root
 
-MySQL doit être sur le port 3306.
+MySQL doit être configuré sur le port 3306.
 
 
 ## Lancer le projet 
